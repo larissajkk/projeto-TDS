@@ -1,0 +1,106 @@
+@model IEnumerable<Pedido>
+
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<h1>Pedidos</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Data de Entrada</th>
+            <th>Responsável</th>
+            <th>Nome do Cliente</th>
+            <th>CPF do Cliente</th>
+            <th>Nome do Item</th>
+            <th>Valor</th>
+            <th>Nome da Empresa Fornecedora</th>
+            <th>Detalhes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pedido in Model)
+        {
+            <tr>
+                <td>@pedido.Id</td>
+                <td>@pedido.Status</td>
+                <td>@pedido.DataEntrada.ToString("dd/MM/yyyy")</td>
+                <td>@pedido.Responsavel</td>
+                <td>@pedido.Cliente.Nome</td>
+                <td>@pedido.Cliente.CPF</td>
+                <td>@pedido.ItemPedido.Nome</td>
+                <td>@pedido.ItemPedido.Valor.ToString("C")</td>
+                <td>@pedido.Fornecedor.Nome</td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = pedido.Id })">Ver Detalhes</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@model Pedido
+
+@{
+    ViewData["Title"] = "Detalhes do Pedido";
+}
+
+<h1>Detalhes do Pedido</h1>
+
+<div>
+    <h4>Pedido</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">ID</dt>
+        <dd class="col-sm-10">@Model.Id</dd>
+
+        <dt class="col-sm-2">Status</dt>
+        <dd class="col-sm-10">@Model.Status</dd>
+
+        <dt class="col-sm-2">Data de Entrada</dt>
+        <dd class="col-sm-10">@Model.DataEntrada.ToString("dd/MM/yyyy")</dd>
+
+        <dt class="col-sm-2">Responsável</dt>
+        <dd class="col-sm-10">@Model.Responsavel</dd>
+
+        <dt class="col-sm-2">Nome do Cliente</dt>
+        <dd class="col-sm-10">@Model.Cliente.Nome</dd>
+
+        <dt class="col-sm-2">CPF do Cliente</dt>
+        <dd class="col-sm-10">@Model.Cliente.CPF</dd>
+
+        <dt class="col-sm-2">Endereço do Cliente</dt>
+        <dd class="col-sm-10">@Model.Cliente.Endereco</dd>
+
+        <dt class="col-sm-2">Telefone do Cliente</dt>
+        <dd class="col-sm-10">@Model.Cliente.Telefone</dd>
+
+        <dt class="col-sm-2">E-mail do Cliente</dt>
+        <dd class="col-sm-10">@Model.Cliente.Email</dd>
+
+        <dt class="col-sm-2">Nome do Item</dt>
+        <dd class="col-sm-10">@Model.ItemPedido.Nome</dd>
+
+        <dt class="col-sm-2">Valor do Item</dt>
+        <dd class="col-sm-10">@Model.ItemPedido.Valor.ToString("C")</dd>
+
+        <dt class="col-sm-2">Nome da Empresa Fornecedora</dt>
+        <dd class="col-sm-10">@Model.Fornecedor.Nome</dd>
+
+        <dt class="col-sm-2">Endereço da Empresa Fornecedora</dt>
+        <dd class="col-sm-10">@Model.Fornecedor.Endereco</dd>
+
+        <dt class="col-sm-2">Margem de Desconto</dt>
+        <dd class="col-sm-10">@Model.Fornecedor.MargemDesconto.ToString("P")</dd>
+
+        <dt class="col-sm-2">Regime Fiscal</dt>
+        <dd class="col-sm-10">@Model.Fornecedor.RegimeFiscal</dd>
+
+        <dt class="col-sm-2">CNPJ</dt>
+        <dd class="col-sm-10">@Model.Fornecedor.CNPJ</dd>
+    </dl>
+</div>
+

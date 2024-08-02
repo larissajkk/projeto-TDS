@@ -1,0 +1,91 @@
+public class Pedido
+{
+    public int Id { get; set; }
+    public DateTime DataEntrada { get; set; }
+    public string Status { get; set; }
+    public string Responsavel { get; set; }
+    public Cliente Cliente { get; set; }
+    public ItemPedido ItemPedido { get; set; }
+    public Fornecedor Fornecedor { get; set; }
+}
+
+public class Cliente
+{
+    public string Nome { get; set; }
+    public string CPF { get; set; }
+    public string Endereco { get; set; }
+    public string Telefone { get; set; }
+    public string Email { get; set; }
+}
+
+public class ItemPedido
+{
+    public int Id { get; set; }
+    public string Nome { get; set; }
+    public decimal Valor { get; set; }
+}
+
+public class Fornecedor
+{
+    public string Nome { get; set; }
+    public string Endereco { get; set; }
+    public decimal MargemDesconto { get; set; }
+    public string RegimeFiscal { get; set; }
+    public string CNPJ { get; set; }
+}
+
+public class ApplicationDbContext : DbContext
+{
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+    }
+
+    public DbSet<Pedido> Pedidos { get; set; }
+    public DbSet<Cliente> Clientes { get; set; }
+    public DbSet<ItemPedido> ItensPedidos { get; set; }
+    public DbSet<Fornecedor> Fornecedores { get; set; }
+}
+
+public class PedidosController : Controller
+{
+    private readonly ApplicationDbContext _context;
+
+    public PedidosController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    // GET: Pedidos
+    public async Task<IActionResult> Index()
+    {
+        var pedidos = await _context.Pedidos
+            .Include(p => p.Cliente)
+            .Include(p => p.ItemPedido)
+            .Include(p => p.Fornecedor)
+            .ToListAsync();
+        return View(pedidos);
+    }
+
+    // GET: Pedidos/Details/5
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null)
+        {
+            return NotFound();
+        }
+
+        var pedido = await _context.Pedidos
+            .Include(p => p.Cliente)
+            .Include(p => p.ItemPedido)
+            .Include(p => p.Fornecedor)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (pedido == null)
+        {
+            return NotFound();
+        }
+
+        return View(pedido);
+    }
+}
